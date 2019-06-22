@@ -1,0 +1,20 @@
+$ f000
+NEG
+    DC 0002
+    + UM
+    BZ END
+    JA NEG
+POS
+    DC 0002
+    - UM
+    BZ END
+    JA POS
+START
+    RF 0001
+    BZ END
+    BN NEG
+    JA POS
+END
+    ON 0000
+UM ~ 1
+    # START

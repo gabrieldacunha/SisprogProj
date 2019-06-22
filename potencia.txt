@@ -1,0 +1,18 @@
+$ 1000
+MULT
+    SA N2
+    * N2
+    DC 0002
+    RT MULT
+START
+    RF 0001
+    SR MULT
+    JA DNV
+DNV
+    RF 0001
+    - UM
+    BZ START
+    ON 0000
+N2 ~ 0
+UM ~ 1
+    # START

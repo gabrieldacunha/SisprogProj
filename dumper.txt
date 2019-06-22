@@ -1,0 +1,34 @@
+$ 0064 //carrega o programa no endereço 0064
+START
+    0D 03
+    0D 04
+    01 ADDR
+    0C CEM
+    05 03
+    00 ADDR
+    05 02
+    0D 03
+    05 02
+    01 COUNT
+    06 DUMP
+DUMP
+    0D 02
+    05 02
+    00 COUNT
+    0A UM
+    01 COUNT
+    03 END
+    06 DUMP
+END
+    0D 03
+    01 ADDR
+    0C CEM
+    05 02
+    00 ADDR
+    05 02
+    0E 06
+CEM ~ 100
+ADDR ~ 0
+COUNT ~ 0
+UM ~ 1
+    # START

@@ -1,0 +1,7 @@
+$ 500
+START
+    LA VAR
+    DC 0002
+    ON 0000
+VAR ~ 99
+    # START

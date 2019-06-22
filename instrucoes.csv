@@ -1,0 +1,17 @@
+Mnemonico,Codigo
+LA,00
+SA,01
+SD,02
+BZ,03
+BN,04
+DC,05
+JA,06
+SR,07
+RT,08
++,09
+-,0A
+*,0B
+/,0C
+RF,0D
+ON,0E
+OF,0F
