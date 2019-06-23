@@ -26,8 +26,8 @@ def loader():
         else:
             memoria[i] = linha[:2]
             memoria[i+1] = linha[2:4]
-        linha = arquivo.readline() #le uma linha
-    linha = arquivo.readline() #le uma linha
+        linha = arquivo.readline() #lê uma linha
+    linha = arquivo.readline() #lê uma linha
     while (linha != "EXE"):
         if (linha[2:4] == "COUNT"):
             memoria[i] = 31
@@ -36,79 +36,80 @@ def loader():
         else:
             memoria[i] = linha[:2]
             memoria[i+1] = linha[2:4]
-        linha = arquivo.readline() #le uma linha
-    linha = arquivo.readline() #le uma linha
+        linha = arquivo.readline() #lê uma linha
+    linha = arquivo.readline() #lê uma linha
     while (linha != "CEM"):
         if (linha[2:4] == "START"):
             memoria[i] = 0
         else:
             memoria[i] = linha[:2]
             memoria[i+1] = linha[2:4]
-        linha = arquivo.readline() #le uma linha
+        linha = arquivo.readline() #lê uma linha
     
 
 def montador_passo2(arquivo, area):
     file = open(arquivo, 'r')
-    file2 = open(arquivo_assembly, 'w')
+    arquivo_assembly = open(arquivo, 'w')
     linha = file.readline() #le uma linha
     #consulta na tabela de instruções se é pseudo
+    i = 0
     while (file.readline()):
         instr = linha[:2]
         #motor de eventos
         if (instr == 'JA'): #JA
             PC = PC + 4
-            mem [i] = '06'
+            memoria[i] = '06'
         elif (instr == 'BN'): #BN
             PC = PC + 4
-            mem [i] = '04'
+            memoria[i] = '04'
         elif (instr == '+'): #+
             PC = PC + 4
-            mem [i] = '09'
+            memoria[i] = '09'
         elif (instr == '0*'): #*
             PC = PC + 4
-            mem [i] = '0B'
+            memoria[i] = '0B'
         elif (instr == 'LA'): #LA
             PC = PC + 4
-            mem [i] = '00'
+            memoria[i] = '00'
         elif (instr == 'SR'): #SR
             PC = PC + 4
-            mem [i] = '05'
+            memoria[i] = '05'
         elif (instr == 'OF'): #OF
             PC = PC + 4
-            mem [i] = '0F'
+            memoria[i] = '0F'
         elif (instr == 'DC'): #DC
             PC = PC + 4
-            mem [i] = '05'
+            memoria[i] = '05'
         elif (instr == 'BZ'): #BZ
             PC = PC + 4
-            mem [i] = '03'
+            memoria[i] = '03'
         elif (instr == 'SD'): #SD
             PC = PC + 4
-            mem [i] = '02'
+            memoria[i] = '02'
         elif (instr == '-'): # -
             PC = PC + 4
-            mem [i] = '0A'
+            memoria[i] = '0A'
         elif (instr == '/'): # /
             PC = PC + 4
-            mem [i] = '0C'
+            memoria[i] = '0C'
         elif (instr=='SA'): # SA
             PC = PC + 4
-            mem [i] = '01'
+            memoria[i] = '01'
         elif (instr == 'RT'): # RT
             PC = PC + 4
-            mem [i] = '08'
+            memoria[i] = '08'
         elif (instr == 'RF'): #RF
             PC = PC + 4
-            mem [i] = '0D'
+            memoria[i] = '0D'
         elif (instr == 'ON'): # ON
             PC = PC + 4
-            mem [i] = '0E'
+            memoria[i] = '0E'
         elif (linha[:1] == 'K'):
             PC = PC + 2
         else:
             PC = PC + 2
-    close(file)
-    close(file2)
+    file.close()
+    arquivo_assembly.close()
     return arquivo_assembly
 
 def montador_passo1(arquivo):
@@ -119,25 +120,26 @@ def montador_passo1(arquivo):
     simbols_df = pd.DataFrame([])
     labels_df = pd.DataFrame([])
 
-    if(linha[0] != ' ')
+    if(linha[0] != ' '):
         if (linha.find(':')!=-1): #existe o simbolo : na linha, entao há rotulo
             #checar se ja ta na tabela de simbolos -> erro
             #incluir na tabela de simbolos
             df['simbolo'] = [linha[:":"]]
             df['valor'] = [linha[":":" "]]
-            df['endereco'] = [ci]
+            df['endereco'] = [PC]
             PC = PC + 2
         else:
             PC = PC + 2
             df['simbolo'] = [linha[:":"]]
             df['valor'] = [linha[":":" "]]
-            df['endereco'] = [ci]
+            df['endereco'] = [PC]
     else:
-        tamanho = linha[].split(2)
+        tamanho = linha.split(2)
         area = area + tamanho
         PC = PC + tamanho
     #fim do arquivo
-    montador_passo2(arquivo, area)
+    arquivo_assembly = montador_passo2(arquivo, area)
+    return arquivo_assembly
 
 
 def executar(arquivo):
@@ -152,7 +154,7 @@ def executar(arquivo):
         if (instr == '06'): #JA
             PC = op
         elif (instr == '04'): #BN
-            if (ac<0):
+            if (AC<0):
                 PC = op
             else:
                 PC = PC + 2
@@ -172,15 +174,15 @@ def executar(arquivo):
             wait = input('')
             PC = op
         elif (instr == '05'): #DC
-            #saida do conteudo do ac
+            #saida do conteudo do AC
             if (op == 0):
-                PC = ac
+                PC = AC
             elif (op == 1):
                 PC = PC + 2
             elif (op == 2):
-                print (ac)
+                print (AC)
             elif (op == 3):
-                print (ac)
+                print (AC)
         elif (instr == '03'): #BZ
             if (AC == 0):
                 PC = op
@@ -196,7 +198,7 @@ def executar(arquivo):
             AC = AC / memoria[op]
             PC = PC + 2
         elif (instr=='01'): # SA
-            memoria[op] = ac
+            memoria[op] = AC
             PC = PC + 2
         elif (instr == '08'): # RT
             PC = op
@@ -223,8 +225,8 @@ def main():
     print(tabulate(comandos, headers='keys', tablefmt='psql'))
     arquivo = input('Digite o programa a ser simulado:')
     loader()
-    montador(arquivo)
-    executar(arquivo)
+    arquivo_assembly = montador_passo1(arquivo)
+    executar(arquivo_assembly)
     
 
 
